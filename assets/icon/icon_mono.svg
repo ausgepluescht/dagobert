@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <!-- Monochrome: Zylinder über Schnabel als Silhouette, Band und Mundspalt ausgespart. -->
-  <g transform="translate(512 512) scale(1.08) rotate(-7) translate(-512 -512)">
-    <g transform="translate(512 350) scale(0.62) translate(-512 -512)">
-      <ellipse cx="512" cy="700" rx="330" ry="78" fill="#FFFFFF"/>
-      <path d="M332 700 L352 300 Q512 262 672 300 L692 700 Q512 760 332 700 Z" fill="#FFFFFF"/>
-      <ellipse cx="512" cy="300" rx="160" ry="40" fill="#FFFFFF"/>
-      <path d="M345 640 Q512 700 679 640 L684 585 Q512 645 340 585 Z" fill="#000000"/>
+  <!-- Monochrome: Zylinder über Schnabel als Silhouette. -->
+  <g transform="translate(512 512) scale(1.05) translate(-512 -512)">
+    <g transform="translate(496 318) rotate(-14) translate(-512 -512)">
+      <ellipse cx="512" cy="712" rx="330" ry="66" fill="#FFFFFF"/>
+      <path d="M352 712 L372 340 Q512 300 652 340 L672 712 Q512 764 352 712 Z" fill="#FFFFFF"/>
+      <ellipse cx="512" cy="340" rx="140" ry="36" fill="#FFFFFF"/>
+      <path d="M362 668 Q512 720 662 668 L666 610 Q512 664 358 610 Z" fill="#000000"/>
     </g>
-    <g transform="translate(540 690) scale(4.3) translate(-60 -62)">
-      <path d="M14 44 C 28 30, 74 24, 104 40 C 116 47, 117 60, 105 65 C 92 70, 70 68, 56 68 C 38 70, 22 66, 14 60 C 6 55, 6 50, 14 44 Z" fill="#FFFFFF"/>
-      <path d="M20 63 C 42 75, 76 77, 100 65 C 104 71, 98 81, 86 84 C 64 89, 40 87, 24 77 C 18 73, 17 67, 20 63 Z" fill="#FFFFFF"/>
-      <path d="M16 61 C 46 69, 80 69, 104 62" stroke="#000000" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <g transform="translate(514 712) rotate(-8) scale(5.6) translate(-60 -34)">
+      <path d="M4 30 C 2 18, 14 10, 34 10 L 98 13 C 112 14, 119 22, 117 31 C 115 39, 105 43, 93 43 L 30 45 C 14 45, 6 41, 4 30 Z" fill="#FFFFFF"/>
+      <path d="M24 44 C 30 54, 48 60, 70 59 C 88 58, 100 53, 102 45 C 86 50, 46 50, 24 44 Z" fill="#FFFFFF"/>
+      <path d="M24 45 C 46 51, 86 51, 102 46" stroke="#000000" stroke-width="2.4" stroke-linecap="round" fill="none"/>
     </g>
   </g>
 </svg>
