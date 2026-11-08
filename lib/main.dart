@@ -43,9 +43,9 @@ class _Bootstrap extends StatefulWidget {
 }
 
 class _BootstrapState extends State<_Bootstrap> {
-  late Future<List<Override>> _init = _initialize();
+  late Future<_Deps> _init = _initialize();
 
-  Future<List<Override>> _initialize() async {
+  Future<_Deps> _initialize() async {
     try {
       await initializeDateFormatting('de_DE');
     } catch (_) {
@@ -69,18 +69,16 @@ class _BootstrapState extends State<_Bootstrap> {
       }
     }
 
-    return [
-      wishRepositoryProvider.overrideWithValue(WishRepository(wishBox)),
-      settingsRepositoryProvider.overrideWithValue(
-        SettingsRepository(settingsBox),
-      ),
-      notificationServiceProvider.overrideWithValue(notifications),
-    ];
+    return _Deps(
+      wishes: WishRepository(wishBox),
+      settings: SettingsRepository(settingsBox),
+      notifications: notifications,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Override>>(
+    return FutureBuilder<_Deps>(
       future: _init,
       builder: (context, snap) {
         if (snap.hasError) {
@@ -93,13 +91,30 @@ class _BootstrapState extends State<_Bootstrap> {
         if (!snap.hasData) {
           return const _Splash();
         }
+        final deps = snap.data!;
         return ProviderScope(
-          overrides: snap.data!,
+          overrides: [
+            wishRepositoryProvider.overrideWithValue(deps.wishes),
+            settingsRepositoryProvider.overrideWithValue(deps.settings),
+            notificationServiceProvider.overrideWithValue(deps.notifications),
+          ],
           child: const DagobertApp(),
         );
       },
     );
   }
+}
+
+class _Deps {
+  const _Deps({
+    required this.wishes,
+    required this.settings,
+    required this.notifications,
+  });
+
+  final WishRepository wishes;
+  final SettingsRepository settings;
+  final NotificationService notifications;
 }
 
 class _Splash extends StatelessWidget {
