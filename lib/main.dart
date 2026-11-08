@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,10 +14,12 @@ import 'data/wish_repository.dart';
 import 'services/local_notification_service.dart';
 import 'services/notification_service.dart';
 import 'state/providers.dart';
+import 'theme/app_theme.dart';
+import 'theme/colors.dart';
+import 'theme/typography.dart';
 
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDateFormatting('de_DE');
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -26,29 +30,172 @@ Future<void> main() async {
   );
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-  await Hive.initFlutter();
-  final wishBox = await Hive.openBox<String>(WishRepository.boxName);
-  final settingsBox = await Hive.openBox<String>(SettingsRepository.boxName);
-  await Migrations.migrateWishes(wishBox);
+  // Erst zeichnen, dann initialisieren: Ein Fehler beim Start wird so
+  // angezeigt statt in einem weißen Bildschirm zu enden.
+  runApp(const _Bootstrap());
+}
 
-  final NotificationService notifications;
-  if (kIsWeb) {
-    notifications = NoopNotificationService();
-  } else {
-    notifications = LocalNotificationService();
-    await notifications.init();
+class _Bootstrap extends StatefulWidget {
+  const _Bootstrap();
+
+  @override
+  State<_Bootstrap> createState() => _BootstrapState();
+}
+
+class _BootstrapState extends State<_Bootstrap> {
+  late Future<List<Override>> _init = _initialize();
+
+  Future<List<Override>> _initialize() async {
+    try {
+      await initializeDateFormatting('de_DE');
+    } catch (_) {
+      // Formatierung fällt dann auf Standardwerte zurück.
+    }
+
+    await Hive.initFlutter();
+    final wishBox = await Hive.openBox<String>(WishRepository.boxName);
+    final settingsBox = await Hive.openBox<String>(SettingsRepository.boxName);
+    await Migrations.migrateWishes(wishBox);
+
+    NotificationService notifications = NoopNotificationService();
+    if (!kIsWeb) {
+      try {
+        final local = LocalNotificationService();
+        await local.init().timeout(const Duration(seconds: 8));
+        notifications = local;
+      } catch (e, st) {
+        // Ohne Benachrichtigungen läuft der Rest der App trotzdem.
+        debugPrint('Notification init failed: $e\n$st');
+      }
+    }
+
+    return [
+      wishRepositoryProvider.overrideWithValue(WishRepository(wishBox)),
+      settingsRepositoryProvider.overrideWithValue(
+        SettingsRepository(settingsBox),
+      ),
+      notificationServiceProvider.overrideWithValue(notifications),
+    ];
   }
 
-  runApp(
-    ProviderScope(
-      overrides: [
-        wishRepositoryProvider.overrideWithValue(WishRepository(wishBox)),
-        settingsRepositoryProvider.overrideWithValue(
-          SettingsRepository(settingsBox),
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Override>>(
+      future: _init,
+      builder: (context, snap) {
+        if (snap.hasError) {
+          return _StartupError(
+            error: snap.error!,
+            stack: snap.stackTrace,
+            onRetry: () => setState(() => _init = _initialize()),
+          );
+        }
+        if (!snap.hasData) {
+          return const _Splash();
+        }
+        return ProviderScope(
+          overrides: snap.data!,
+          child: const DagobertApp(),
+        );
+      },
+    );
+  }
+}
+
+class _Splash extends StatelessWidget {
+  const _Splash();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.light(),
+      home: const Scaffold(
+        backgroundColor: DgColors.warmWhite,
+        body: Center(
+          child: SizedBox(
+            width: 28,
+            height: 28,
+            child: CircularProgressIndicator(strokeWidth: 3),
+          ),
         ),
-        notificationServiceProvider.overrideWithValue(notifications),
-      ],
-      child: const DagobertApp(),
-    ),
-  );
+      ),
+    );
+  }
+}
+
+class _StartupError extends StatelessWidget {
+  const _StartupError({
+    required this.error,
+    required this.stack,
+    required this.onRetry,
+  });
+
+  final Object error;
+  final StackTrace? stack;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final details = '$error\n\n${stack ?? ''}';
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.light(),
+      home: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Dagobert konnte nicht starten.', style: DgType.h1),
+                const SizedBox(height: 8),
+                Text(
+                  'Das sollte nicht passieren. Der Fehlertext unten hilft beim Beheben. Antippen kopiert ihn.',
+                  style: DgType.meta,
+                ),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () async {
+                      await Clipboard.setData(ClipboardData(text: details));
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Fehlertext kopiert.')),
+                        );
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: DgColors.warmWhite,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: DgColors.sand),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Text(
+                          details,
+                          style: const TextStyle(
+                            fontFamily: 'monospace',
+                            fontSize: 12,
+                            color: DgColors.espresso,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                FilledButton(
+                  onPressed: onRetry,
+                  child: const Text('Noch einmal versuchen'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
