@@ -1,0 +1,47 @@
+import 'package:flutter/material.dart';
+
+/// Zentrale Icon-Auswahl (Material Rounded).
+abstract final class DgIcons {
+  static const home = Icons.home_rounded;
+  static const list = Icons.format_list_bulleted_rounded;
+  static const check = Icons.fact_check_outlined;
+  static const profile = Icons.person_rounded;
+  static const moneyBag = Icons.savings_rounded;
+  static const add = Icons.add_rounded;
+  static const back = Icons.arrow_back_ios_new_rounded;
+  static const close = Icons.close_rounded;
+  static const link = Icons.link_rounded;
+  static const openLink = Icons.open_in_new_rounded;
+  static const clock = Icons.schedule_rounded;
+  static const bell = Icons.notifications_rounded;
+  static const bellOff = Icons.notifications_off_rounded;
+  static const bought = Icons.shopping_bag_rounded;
+  static const skipped = Icons.check_rounded;
+  static const trash = Icons.delete_outline_rounded;
+  static const more = Icons.more_horiz_rounded;
+  static const sort = Icons.swap_vert_rounded;
+  static const edit = Icons.edit_rounded;
+  static const goal = Icons.flag_rounded;
+  static const sparkle = Icons.auto_awesome_rounded;
+  static const calendar = Icons.event_rounded;
+  static const lightbulb = Icons.lightbulb_outline_rounded;
+  static const question = Icons.help_outline_rounded;
+  static const trendDown = Icons.trending_down_rounded;
+  static const trendUp = Icons.trending_up_rounded;
+  static const share = Icons.ios_share_rounded;
+  static const download = Icons.download_rounded;
+  static const upload = Icons.upload_rounded;
+  static const lock = Icons.lock_outline_rounded;
+  static const euro = Icons.euro_rounded;
+  static const work = Icons.work_outline_rounded;
+  static const chevron = Icons.chevron_right_rounded;
+  static const star = Icons.star_rounded;
+  static const headphones = Icons.headphones_rounded;
+  static const household = Icons.kitchen_rounded;
+  static const tech = Icons.devices_rounded;
+  static const clothing = Icons.checkroom_rounded;
+  static const leisure = Icons.sports_esports_rounded;
+  static const travel = Icons.flight_rounded;
+  static const gift = Icons.card_giftcard_rounded;
+  static const other = Icons.category_rounded;
+}
