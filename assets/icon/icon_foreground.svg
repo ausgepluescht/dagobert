@@ -1,56 +1,41 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <!-- Adaptive icon foreground: blauer Zylinder über einem Cartoon-Entenschnabel, ohne Gesicht. -->
+  <!-- Adaptive icon foreground: schwarzer Zylinder, leicht geschwungen (konkave Seiten, aufgebogene Krempe). -->
   <defs>
     <linearGradient id="crown" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#6FB3E8"/>
-      <stop offset="0.5" stop-color="#3F86C9"/>
-      <stop offset="1" stop-color="#255E99"/>
+      <stop offset="0" stop-color="#4A4A4A"/>
+      <stop offset="0.35" stop-color="#1E1E1E"/>
+      <stop offset="0.8" stop-color="#0A0A0A"/>
+      <stop offset="1" stop-color="#262626"/>
     </linearGradient>
     <linearGradient id="top" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#8CC4EE"/>
-      <stop offset="1" stop-color="#4A90D0"/>
+      <stop offset="0" stop-color="#5A5A5A"/>
+      <stop offset="1" stop-color="#1A1A1A"/>
     </linearGradient>
     <linearGradient id="brim" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#2A2118"/>
-      <stop offset="1" stop-color="#0F0C09"/>
+      <stop offset="0" stop-color="#2E2E2E"/>
+      <stop offset="1" stop-color="#050505"/>
     </linearGradient>
     <linearGradient id="band" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#2E2520"/>
-      <stop offset="1" stop-color="#120E0B"/>
-    </linearGradient>
-    <linearGradient id="billTop" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#FFC24A"/>
-      <stop offset="0.6" stop-color="#F5A623"/>
-      <stop offset="1" stop-color="#E08A12"/>
-    </linearGradient>
-    <linearGradient id="billBottom" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#E8941C"/>
-      <stop offset="1" stop-color="#B86A0A"/>
+      <stop offset="0" stop-color="#3A3A3A"/>
+      <stop offset="0.5" stop-color="#141414"/>
+      <stop offset="1" stop-color="#2A2A2A"/>
     </linearGradient>
   </defs>
 
-  <g transform="translate(512 512) scale(1.05) translate(-512 -512)">
-    <!-- Zylinder, nach links geneigt -->
-    <g transform="translate(496 318) rotate(-14) translate(-512 -512)">
-      <ellipse cx="512" cy="712" rx="330" ry="66" fill="url(#brim)"/>
-      <path d="M352 712 L372 340 Q512 300 652 340 L672 712 Q512 764 352 712 Z" fill="url(#crown)"/>
-      <path d="M362 668 Q512 720 662 668 L666 610 Q512 664 358 610 Z" fill="url(#band)"/>
-      <ellipse cx="512" cy="340" rx="140" ry="36" fill="url(#top)"/>
-      <path d="M392 372 Q388 500 380 640" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="20" stroke-linecap="round" fill="none"/>
-      <path d="M352 712 Q512 764 672 712 Q512 746 352 712 Z" fill="#000000" fill-opacity="0.3"/>
-    </g>
-
-    <!-- Cartoon-Schnabel: flach, breit, Spitze links, Ansatz rechts -->
-    <g transform="translate(514 712) rotate(-8) scale(5.6) translate(-60 -34)">
-      <!-- Oberschnabel -->
-      <path d="M4 30 C 2 18, 14 10, 34 10 L 98 13 C 112 14, 119 22, 117 31 C 115 39, 105 43, 93 43 L 30 45 C 14 45, 6 41, 4 30 Z" fill="url(#billTop)"/>
-      <!-- Glanz -->
-      <path d="M18 20 C 34 15, 60 14, 90 17" stroke="#FFFFFF" stroke-opacity="0.5" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-      <!-- Nasenlöcher am Ansatz -->
-      <ellipse cx="96" cy="24" rx="4.5" ry="2.4" fill="#B86A0A" transform="rotate(-8 96 24)"/>
-      <!-- Unterschnabel, schmaler und zurückgesetzt -->
-      <path d="M24 44 C 30 54, 48 60, 70 59 C 88 58, 100 53, 102 45 C 86 50, 46 50, 24 44 Z" fill="url(#billBottom)"/>
-      <path d="M24 44 C 46 50, 86 50, 102 45 C 86 48, 46 48, 24 44 Z" fill="#000000" fill-opacity="0.25"/>
-    </g>
+  <g transform="translate(512 528) rotate(-8) translate(-512 -512)">
+    <!-- Krempe, an den Seiten nach oben geschwungen -->
+    <path d="M150 660 C 200 790, 824 790, 874 660 C 890 650, 882 630, 866 636 C 820 720, 204 720, 158 636 C 142 630, 134 650, 150 660 Z" fill="url(#brim)"/>
+    <!-- Krempen-Oberseite (Glanz) -->
+    <path d="M162 640 C 210 716, 814 716, 862 640 C 810 700, 214 700, 162 640 Z" fill="#FFFFFF" fill-opacity="0.08"/>
+    <!-- Krone mit leicht konkaven Seiten, oben etwas breiter -->
+    <path d="M338 700 C 356 580, 352 420, 322 292 Q 512 236 702 292 C 672 420, 668 580, 686 700 Q 512 752 338 700 Z" fill="url(#crown)"/>
+    <!-- Hutband -->
+    <path d="M345 648 Q 512 708 679 648 L 684 596 Q 512 654 340 596 Z" fill="url(#band)"/>
+    <!-- Deckel -->
+    <ellipse cx="512" cy="292" rx="190" ry="44" fill="url(#top)"/>
+    <!-- Glanzlicht links -->
+    <path d="M372 330 C 386 440, 384 540, 376 640" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="26" stroke-linecap="round" fill="none"/>
+    <!-- Schatten der Krone auf der Krempe -->
+    <path d="M338 700 Q 512 752 686 700 Q 512 740 338 700 Z" fill="#000000" fill-opacity="0.45"/>
   </g>
 </svg>
