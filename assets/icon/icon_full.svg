@@ -1,11 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
   <!-- Legacy launcher icon with background -->
-  <rect width="1024" height="1024" rx="220" fill="#FFF8F1"/>
-  <g transform="translate(512 512) scale(6.2) translate(-60 -60)">
-    <path d="M14 46 C 30 30, 76 24, 104 42 C 116 50, 116 62, 104 66 C 96 69, 86 67, 78 68 C 60 72, 36 73, 18 64 C 8 59, 6 50, 14 46 Z" fill="#D9A425"/>
-    <path d="M18 48 C 33 35, 74 30, 100 45 C 109 51, 109 59, 100 62 C 92 64, 84 63, 77 64 C 60 67, 38 68, 22 60 C 14 56, 13 51, 18 48 Z" fill="#E2711D"/>
-    <path d="M22 59 C 44 64, 74 62, 102 56" stroke="#FFF8F1" stroke-width="3" stroke-linecap="round" fill="none"/>
-    <ellipse cx="86" cy="45" rx="4.5" ry="2.6" fill="#B85A12" transform="rotate(-8 86 45)"/>
-    <path d="M30 70 C 44 80, 72 82, 96 74 C 100 78, 96 86, 86 88 C 66 92, 42 90, 28 80 C 24 76, 26 72, 30 70 Z" fill="#B85A12"/>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFF8F1"/>
+      <stop offset="1" stop-color="#F7E6BC"/>
+    </linearGradient>
+    <linearGradient id="crown" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3A2E24"/>
+      <stop offset="0.45" stop-color="#2A2118"/>
+      <stop offset="1" stop-color="#1A1410"/>
+    </linearGradient>
+    <linearGradient id="brim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3A2E24"/>
+      <stop offset="1" stop-color="#1A1410"/>
+    </linearGradient>
+    <linearGradient id="band" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#E8B83A"/>
+      <stop offset="0.5" stop-color="#D9A425"/>
+      <stop offset="1" stop-color="#B8851A"/>
+    </linearGradient>
+    <linearGradient id="top" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4A3B2E"/>
+      <stop offset="1" stop-color="#2A2118"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="220" fill="url(#bg)"/>
+  <g transform="translate(512 512) scale(0.82) translate(-512 -512) translate(512 530) rotate(-8) translate(-512 -512)">
+    <ellipse cx="512" cy="700" rx="330" ry="78" fill="url(#brim)"/>
+    <path d="M332 700 L352 300 Q512 262 672 300 L692 700 Q512 760 332 700 Z" fill="url(#crown)"/>
+    <path d="M345 640 Q512 700 679 640 L684 585 Q512 645 340 585 Z" fill="url(#band)"/>
+    <ellipse cx="512" cy="300" rx="160" ry="40" fill="url(#top)"/>
+    <path d="M375 330 Q372 480 362 620" stroke="#FFF8F1" stroke-opacity="0.28" stroke-width="22" stroke-linecap="round" fill="none"/>
+    <path d="M332 700 Q512 760 692 700 Q512 740 332 700 Z" fill="#000000" fill-opacity="0.25"/>
   </g>
 </svg>
