@@ -1,9 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <!-- Monochrome: Notification-Icon und Themed Icon (Android 13+). Zylinder-Silhouette mit ausgespartem Band. -->
-  <g transform="translate(512 530) rotate(-8) translate(-512 -512)">
-    <ellipse cx="512" cy="700" rx="330" ry="78" fill="#FFFFFF"/>
-    <path d="M332 700 L352 300 Q512 262 672 300 L692 700 Q512 760 332 700 Z" fill="#FFFFFF"/>
-    <ellipse cx="512" cy="300" rx="160" ry="40" fill="#FFFFFF"/>
-    <path d="M345 640 Q512 700 679 640 L684 585 Q512 645 340 585 Z" fill="#000000"/>
+  <!-- Monochrome: Zylinder über Schnabel als Silhouette, Band und Mundspalt ausgespart. -->
+  <g transform="translate(512 512) scale(1.08) rotate(-7) translate(-512 -512)">
+    <g transform="translate(512 350) scale(0.62) translate(-512 -512)">
+      <ellipse cx="512" cy="700" rx="330" ry="78" fill="#FFFFFF"/>
+      <path d="M332 700 L352 300 Q512 262 672 300 L692 700 Q512 760 332 700 Z" fill="#FFFFFF"/>
+      <ellipse cx="512" cy="300" rx="160" ry="40" fill="#FFFFFF"/>
+      <path d="M345 640 Q512 700 679 640 L684 585 Q512 645 340 585 Z" fill="#000000"/>
+    </g>
+    <g transform="translate(540 690) scale(4.3) translate(-60 -62)">
+      <path d="M14 44 C 28 30, 74 24, 104 40 C 116 47, 117 60, 105 65 C 92 70, 70 68, 56 68 C 38 70, 22 66, 14 60 C 6 55, 6 50, 14 44 Z" fill="#FFFFFF"/>
+      <path d="M20 63 C 42 75, 76 77, 100 65 C 104 71, 98 81, 86 84 C 64 89, 40 87, 24 77 C 18 73, 17 67, 20 63 Z" fill="#FFFFFF"/>
+      <path d="M16 61 C 46 69, 80 69, 104 62" stroke="#000000" stroke-width="3" stroke-linecap="round" fill="none"/>
+    </g>
   </g>
 </svg>

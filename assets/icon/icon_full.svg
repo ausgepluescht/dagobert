@@ -1,10 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <!-- Legacy launcher icon with background -->
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#FFF8F1"/>
-      <stop offset="1" stop-color="#F7E6BC"/>
-    </linearGradient>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF8F1"/><stop offset="1" stop-color="#F7E6BC"/></linearGradient>
     <linearGradient id="crown" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#3A2E24"/>
       <stop offset="0.45" stop-color="#2A2118"/>
@@ -23,14 +19,40 @@
       <stop offset="0" stop-color="#4A3B2E"/>
       <stop offset="1" stop-color="#2A2118"/>
     </linearGradient>
+    <linearGradient id="billTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F08A3A"/>
+      <stop offset="1" stop-color="#E2711D"/>
+    </linearGradient>
+    <linearGradient id="billBottom" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#C8631A"/>
+      <stop offset="1" stop-color="#9E4B0E"/>
+    </linearGradient>
   </defs>
   <rect width="1024" height="1024" rx="220" fill="url(#bg)"/>
-  <g transform="translate(512 512) scale(0.82) translate(-512 -512) translate(512 530) rotate(-8) translate(-512 -512)">
-    <ellipse cx="512" cy="700" rx="330" ry="78" fill="url(#brim)"/>
-    <path d="M332 700 L352 300 Q512 262 672 300 L692 700 Q512 760 332 700 Z" fill="url(#crown)"/>
-    <path d="M345 640 Q512 700 679 640 L684 585 Q512 645 340 585 Z" fill="url(#band)"/>
-    <ellipse cx="512" cy="300" rx="160" ry="40" fill="url(#top)"/>
-    <path d="M375 330 Q372 480 362 620" stroke="#FFF8F1" stroke-opacity="0.28" stroke-width="22" stroke-linecap="round" fill="none"/>
-    <path d="M332 700 Q512 760 692 700 Q512 740 332 700 Z" fill="#000000" fill-opacity="0.25"/>
+
+  <g transform="translate(512 512) scale(0.9) rotate(-7) translate(-512 -512)">
+    <!-- Zylinder (oben) -->
+    <g transform="translate(512 350) scale(0.62) translate(-512 -512)">
+      <ellipse cx="512" cy="700" rx="330" ry="78" fill="url(#brim)"/>
+      <path d="M332 700 L352 300 Q512 262 672 300 L692 700 Q512 760 332 700 Z" fill="url(#crown)"/>
+      <path d="M345 640 Q512 700 679 640 L684 585 Q512 645 340 585 Z" fill="url(#band)"/>
+      <ellipse cx="512" cy="300" rx="160" ry="40" fill="url(#top)"/>
+      <path d="M375 330 Q372 480 362 620" stroke="#FFF8F1" stroke-opacity="0.28" stroke-width="22" stroke-linecap="round" fill="none"/>
+      <path d="M332 700 Q512 760 692 700 Q512 740 332 700 Z" fill="#000000" fill-opacity="0.25"/>
+    </g>
+
+    <!-- Schnabel (unten), leicht nach rechts zeigend -->
+    <g transform="translate(540 690) scale(4.3) translate(-60 -62)">
+      <!-- Oberschnabel -->
+      <path d="M14 44 C 28 30, 74 24, 104 40 C 116 47, 117 60, 105 65 C 92 70, 70 68, 56 68 C 38 70, 22 66, 14 60 C 6 55, 6 50, 14 44 Z" fill="url(#billTop)"/>
+      <!-- Nasenloch -->
+      <ellipse cx="88" cy="44" rx="5" ry="2.8" fill="#B85A12" transform="rotate(-10 88 44)"/>
+      <!-- Glanz auf dem Oberschnabel -->
+      <path d="M26 42 C 44 34, 70 32, 92 38" stroke="#FFF8F1" stroke-opacity="0.35" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <!-- Mundspalt -->
+      <path d="M16 61 C 46 69, 80 69, 104 62" stroke="#7A3A08" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+      <!-- Unterschnabel -->
+      <path d="M20 63 C 42 75, 76 77, 100 65 C 104 71, 98 81, 86 84 C 64 89, 40 87, 24 77 C 18 73, 17 67, 20 63 Z" fill="url(#billBottom)"/>
+    </g>
   </g>
 </svg>
