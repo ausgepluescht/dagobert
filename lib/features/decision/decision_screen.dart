@@ -107,12 +107,13 @@ class _DecisionScreenState extends ConsumerState<DecisionScreen> {
         appBar: AppBar(leading: const BackButton()),
         body: const EmptyState(
           icon: DgIcons.sparkle,
-          title: 'Dieser Wunsch ist weg.',
-          body: 'Vielleicht hast du ihn gerade gelöscht. Kein Drama.',
+          title: 'Diesen Wunsch gibt es nicht mehr.',
+          body: 'Vielleicht hast du ihn gerade gelöscht. Halb so wild.',
         ),
       );
     }
     final rate = ref.watch(hourlyRateProvider);
+    final hoursPerDay = ref.watch(hoursPerDayProvider);
     final now = clock.now();
     final ripe = item.isRipe(now);
     final hours = WorkHours.hoursFor(item.priceCents, rate);
@@ -124,6 +125,7 @@ class _DecisionScreenState extends ConsumerState<DecisionScreen> {
 
     return Scaffold(
       body: SafeArea(
+        bottom: false,
         child: Column(
           children: [
             Padding(
@@ -174,7 +176,7 @@ class _DecisionScreenState extends ConsumerState<DecisionScreen> {
                     },
                     itemBuilder: (_) => [
                       const PopupMenuItem(value: 'price', child: Text('Preis aktualisieren')),
-                      PopupMenuItem(value: 'check', child: Text(hasCheck ? 'Check wiederholen' : '5-Fragen-Check')),
+                      PopupMenuItem(value: 'check', child: Text(hasCheck ? 'Check wiederholen' : 'Kauf-Check machen')),
                       if (decided) const PopupMenuItem(value: 'restore', child: Text('Zurück auf die Merkliste')),
                       const PopupMenuItem(
                         value: 'delete',
@@ -216,7 +218,14 @@ class _DecisionScreenState extends ConsumerState<DecisionScreen> {
                     child: Row(
                       children: [
                         Expanded(child: _Fact(value: MoneyFormat.euro(item.priceCents), label: 'Preis', color: DgColors.copper)),
-                        Expanded(child: _Fact(value: hours == null ? '–' : WorkHours.format(hours).replaceFirst('≈ ', ''), label: 'Arbeit netto')),
+                        Expanded(
+                          child: _Fact(
+                            value: hours == null ? '–' : WorkHours.format(hours).replaceFirst('≈ ', ''),
+                            label: hours != null && hours / hoursPerDay >= 1
+                                ? WorkDays.formatDays(hours / hoursPerDay)
+                                : 'Arbeit netto',
+                          ),
+                        ),
                         Expanded(child: _Fact(value: TimeFormat.compact(waited), label: 'gewartet')),
                       ],
                     ),
@@ -248,12 +257,12 @@ class _DecisionScreenState extends ConsumerState<DecisionScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('5-Fragen-Check', style: DgType.bodyStrong.copyWith(fontSize: 15)),
+                              Text('Kauf-Check', style: DgType.bodyStrong.copyWith(fontSize: 15)),
                               const SizedBox(height: 2),
                               Text(
                                 hasCheck
                                     ? '★ ${CheckQuestions.formatScore(item.checkScore)} / 5 · ${verdict.title}'
-                                    : 'Noch nicht gemacht. 30 Sekunden.',
+                                    : 'Noch nicht gemacht. Dauert eine Minute.',
                                 style: DgType.meta.copyWith(
                                   fontSize: 12,
                                   color: hasCheck && verdict == CheckVerdict.smart ? DgColors.pineGreen : DgColors.cocoa,
@@ -306,7 +315,7 @@ class _DecisionScreenState extends ConsumerState<DecisionScreen> {
             ),
             if (!decided)
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 16 + MediaQuery.viewPaddingOf(context).bottom),
                 child: Column(
                   children: [
                     FilledButton.icon(

@@ -270,7 +270,7 @@ class ProfileScreen extends ConsumerWidget {
           SurfaceCard(
             child: Text(
               'Dagobert basiert auf "Happy Money" von Elizabeth Dunn und Michael Norton: Nicht wie viel du ausgibst entscheidet über dein Glück, sondern wie. '
-              'Die fünf Fragen helfen, Geld in Zeit, Erlebnisse, Nähe, Treats und Vorfreude zu verwandeln.',
+              'Die Fragen helfen, Geld in Zeit, Erlebnisse, Nähe, besondere Momente und Vorfreude zu verwandeln.',
               style: DgType.body.copyWith(fontSize: 13, color: DgColors.cocoa),
             ),
           ),

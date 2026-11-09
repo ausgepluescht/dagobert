@@ -30,6 +30,7 @@ abstract final class DecisionActions {
     coins.burst(from: from, coins: _coinsFor(item.priceCents));
 
     final rate = ref.read(hourlyRateProvider);
+    final hoursPerDay = ref.read(hoursPerDayProvider);
     final hours = WorkHours.hoursFor(item.priceCents, rate);
     final after = before + item.priceCents;
     final milestone = _crossedMilestone(before, after);
@@ -43,7 +44,7 @@ abstract final class DecisionActions {
               ? 'Meilenstein: ${MoneyFormat.euro(milestone)} im Tresor. ${item.title} verzichtet.'
               : hours == null
               ? '${MoneyFormat.euro(item.priceCents)} bleiben im Tresor.'
-              : '${MoneyFormat.euro(item.priceCents)} bleiben im Tresor. Das sind ${WorkHours.format(hours).replaceFirst('≈ ', '')} deines Lebens.',
+              : '${MoneyFormat.euro(item.priceCents)} bleiben im Tresor. Das sind ${WorkDays.formatWithDays(hours, hoursPerDay).replaceFirst('≈ ', '')} Lebenszeit.',
         ),
         action: SnackBarAction(
           label: 'Rückgängig',
@@ -77,7 +78,7 @@ abstract final class DecisionActions {
         content: Text(
           result.experienceDate != null
               ? 'Gekauft. Jetzt kommt das Beste: die Vorfreude.'
-              : 'Gekauft und bewusst entschieden. In 30 Tagen fragt Dagobert nach.',
+              : 'Bewusst entschieden. In 30 Tagen fragt Dagobert, ob es das wert war.',
         ),
         action: SnackBarAction(
           label: 'Rückgängig',
@@ -97,7 +98,7 @@ abstract final class DecisionActions {
       context: context,
       builder: (ctx) => SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+          padding: EdgeInsets.fromLTRB(20, 4, 20, 20 + MediaQuery.viewPaddingOf(ctx).bottom),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +130,7 @@ abstract final class DecisionActions {
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: Text('Gut. Dagobert fragt ${option.sentence} noch einmal.'),
+            content: Text('Gut. Dagobert meldet sich ${option.sentence} noch einmal.'),
           ),
         );
     }
@@ -143,7 +144,7 @@ abstract final class DecisionActions {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text('Eintrag löschen?'),
         content: const Text(
-          'Löschen ist für Fehleinträge gedacht und zählt nicht als gespart. Wenn du bewusst verzichtest, nimm "Verzichten".',
+          'Löschen ist für Fehleinträge gedacht und zählt nicht als gespart. Wenn du bewusst verzichtest, nimm „Verzichten“.',
         ),
         actions: [
           TextButton(

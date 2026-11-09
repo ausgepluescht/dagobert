@@ -62,7 +62,7 @@ class _GoalSheetState extends ConsumerState<_GoalSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final bottom = MediaQuery.of(context).viewInsets.bottom;
+    final bottom = MediaQuery.of(context).viewInsets.bottom + MediaQuery.viewPaddingOf(context).bottom;
     final hasGoal = ref.watch(settingsProvider).hasGoal;
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 4, 20, 20 + bottom),

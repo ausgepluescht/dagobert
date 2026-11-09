@@ -42,6 +42,7 @@ class WishCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final rate = ref.watch(hourlyRateProvider);
+    final hoursPerDay = ref.watch(hoursPerDayProvider);
     final now = clock.now();
     final ripe = item.isRipe(now);
     final hours = WorkHours.hoursFor(item.priceCents, rate);
@@ -50,7 +51,7 @@ class WishCard extends ConsumerWidget {
     final host = linkHost(item.url);
 
     final metaParts = <String>[
-      if (hours != null) '${WorkHours.format(hours)} Arbeit',
+      if (hours != null) WorkDays.formatWithDays(hours, hoursPerDay),
       TimeFormat.since(item.waitingSince(now)),
     ];
 

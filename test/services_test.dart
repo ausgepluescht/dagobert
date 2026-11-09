@@ -33,6 +33,15 @@ void main() {
       expect(WorkHours.format(0.5), '≈ 30 Min');
       expect(WorkHours.format(null), '–');
     });
+
+    test('Arbeitstage: Wochenstunden / 5, ab einem Tag angehängt', () {
+      expect(WorkDays.hoursPerDay(40), 8);
+      expect(WorkDays.hoursPerDay(null), 8);
+      expect(WorkDays.formatWithDays(5, 8), '≈ 5 Std');
+      expect(WorkDays.formatWithDays(14.4, 8), '≈ 14 Std · 1,8 Arbeitstage');
+      expect(WorkDays.formatWithDays(8, 8), '≈ 8 Std · 1 Arbeitstag');
+      expect(WorkDays.formatWithDays(96, 8), '≈ 96 Std · 12 Arbeitstage');
+    });
   });
 
   group('MoneyFormat', () {
@@ -103,9 +112,18 @@ void main() {
       expect(CheckQuestions.verdict(0), CheckVerdict.leakage);
     });
 
-    test('Need-Modus hängt Zusatzfragen an', () {
-      expect(CheckQuestions.forType(WishType.want).length, 5);
-      expect(CheckQuestions.forType(WishType.need).length, 8);
+    test('Modi und Need-Zusatzfragen', () {
+      expect(CheckQuestions.forMode(CheckMode.core, WishType.want).length, 5);
+      expect(CheckQuestions.forMode(CheckMode.core, WishType.need).length, 8);
+      expect(CheckQuestions.forMode(CheckMode.impulse, WishType.want).length, 8);
+      expect(CheckQuestions.forMode(CheckMode.big, WishType.want).length, 18);
+      expect(CheckQuestions.all.map((q) => q.id).toSet().length, CheckQuestions.all.length);
+    });
+
+    test('Anteiliges Urteil für lange Listen', () {
+      expect(CheckQuestions.verdictFor(12, 18), CheckVerdict.smart);
+      expect(CheckQuestions.verdictFor(5, 18), CheckVerdict.letItRipen);
+      expect(CheckQuestions.verdictFor(2, 18), CheckVerdict.leakage);
     });
   });
 

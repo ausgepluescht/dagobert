@@ -42,6 +42,7 @@ class HomeScreen extends ConsumerWidget {
     final ripe = ref.watch(ripeWishesProvider);
     final settings = ref.watch(settingsProvider);
     final upcoming = ref.watch(upcomingExperiencesProvider);
+    final hoursPerDay = ref.watch(hoursPerDayProvider);
     final now = clock.now();
 
     final waitingTotal = waiting.fold<int>(0, (s, w) => s + w.priceCents);
@@ -83,7 +84,7 @@ class HomeScreen extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 20),
-          _HeroCard(savings: savings, settings: settings),
+          _HeroCard(savings: savings, settings: settings, hoursPerDay: hoursPerDay),
           const SizedBox(height: 14),
           Row(
             children: [
@@ -106,7 +107,7 @@ class HomeScreen extends ConsumerWidget {
                   value: nextReminder == null
                       ? '–'
                       : TimeFormat.compact(nextReminder.difference(now)),
-                  label: 'bis Erinnerung',
+                  label: 'Erinnerung',
                 ),
               ),
             ],
@@ -147,9 +148,9 @@ class HomeScreen extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Schnell-Check', style: DgType.bodyStrong.copyWith(fontSize: 15)),
+                      Text('Kauf-Check', style: DgType.bodyStrong.copyWith(fontSize: 15)),
                       const SizedBox(height: 2),
-                      Text('5 Fragen, 30 Sekunden', style: DgType.meta.copyWith(fontSize: 12)),
+                      Text('Fünf Fragen, Regler schieben, Farbe lesen', style: DgType.meta.copyWith(fontSize: 12)),
                     ],
                   ),
                 ),
@@ -165,9 +166,9 @@ class HomeScreen extends ConsumerWidget {
             const SizedBox(height: 10),
             const EmptyState(
               icon: DgIcons.sparkle,
-              title: 'Noch keine Wünsche auf Reife.',
+              title: 'Noch nichts auf der Merkliste.',
               body:
-                  'Wenn dich das nächste Mal etwas anlacht, tipp auf Plus. Dagobert merkt es sich und erinnert dich, wenn der Kopf wieder kühl ist.',
+                  'Wenn dich das nächste Mal etwas anlacht, tipp auf das Plus. Dagobert merkt es sich und meldet sich, wenn der Kopf wieder kühl ist.',
             ),
           ],
         ],
@@ -177,10 +178,11 @@ class HomeScreen extends ConsumerWidget {
 }
 
 class _HeroCard extends StatelessWidget {
-  const _HeroCard({required this.savings, required this.settings});
+  const _HeroCard({required this.savings, required this.settings, required this.hoursPerDay});
 
   final Savings savings;
   final dynamic settings;
+  final double hoursPerDay;
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +230,7 @@ class _HeroCard extends StatelessWidget {
                 ? (savings.count == 0
                       ? 'Jeder Verzicht landet hier.'
                       : '${savings.count} ${savings.count == 1 ? 'Verzicht' : 'Verzichte'}')
-                : '${WorkHours.format(savings.hours)} Arbeit zurückgewonnen',
+                : '${WorkDays.formatWithDays(savings.hours, hoursPerDay)} zurückgewonnen',
             style: DgType.body.copyWith(
               color: DgColors.white,
               fontSize: 15,

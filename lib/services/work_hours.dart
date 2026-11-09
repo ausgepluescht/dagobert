@@ -44,3 +44,34 @@ abstract final class WorkHours {
     return '≈ ${hours.round()} Std';
   }
 }
+
+/// Arbeitstage: ein Tag = Wochenstunden / 5, ohne Angabe 8 Stunden.
+extension WorkDays on WorkHours {
+  static double hoursPerDay(double? hoursPerWeek) {
+    if (hoursPerWeek == null || hoursPerWeek <= 0) return 8;
+    return hoursPerWeek / 5;
+  }
+
+  /// "≈ 14 Std" bzw. ab einem vollen Arbeitstag "≈ 14 Std · 1,8 Arbeitstage".
+  static String formatWithDays(double? hours, double hoursPerDay) {
+    if (hours == null) return '–';
+    final base = WorkHours.format(hours);
+    final days = hours / hoursPerDay;
+    if (days < 1) return base;
+    return '$base · ${formatDays(days)}';
+  }
+
+  /// "1,8 Arbeitstage", "1 Arbeitstag", "12 Arbeitstage".
+  static String formatDays(double days) {
+    final String text;
+    if (days >= 10) {
+      text = days.round().toString();
+    } else {
+      final rounded = (days * 10).round() / 10;
+      text = rounded == rounded.roundToDouble()
+          ? rounded.toInt().toString()
+          : rounded.toString().replaceAll('.', ',');
+    }
+    return text == '1' ? '1 Arbeitstag' : '$text Arbeitstage';
+  }
+}

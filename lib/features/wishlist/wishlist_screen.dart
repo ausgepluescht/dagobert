@@ -204,11 +204,11 @@ class WishlistScreen extends ConsumerWidget {
                       EmptyState(
                         icon: DgIcons.sparkle,
                         title: allWaiting.isEmpty
-                            ? 'Noch keine Wünsche auf Reife.'
-                            : 'Hier ist gerade nichts.',
+                            ? 'Noch nichts auf der Merkliste.'
+                            : 'In dieser Auswahl ist nichts.',
                         body: allWaiting.isEmpty
-                            ? 'Trag ein, was dich anlacht. Dagobert zeigt dir, wie viele Arbeitsstunden es kostet, und erinnert dich später.'
-                            : 'In dieser Kategorie wartet nichts. Wechsle den Filter oder merk dir etwas Neues.',
+                            ? 'Trag ein, was dich anlacht. Dagobert rechnet den Preis in Arbeitszeit um und meldet sich später wieder.'
+                            : 'Wechsle den Filter oder merk dir etwas Neues.',
                         actionLabel: 'Wunsch merken',
                         onAction: () => showAddWishSheet(context),
                       ),

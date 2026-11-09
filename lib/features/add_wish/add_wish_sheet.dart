@@ -93,7 +93,7 @@ class _AddWishSheetState extends ConsumerState<AddWishSheet> {
     final title = _title.text.trim();
     if (title.isEmpty || cents == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Name und Preis reichen. Beides bitte.')),
+        const SnackBar(content: Text('Name und Preis genügen, aber beides bitte.')),
       );
       return;
     }
@@ -125,7 +125,7 @@ class _AddWishSheetState extends ConsumerState<AddWishSheet> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Gemerkt. Dagobert fragt ${(_reminder ?? _suggested(rate)).sentence} nach.',
+            'Gemerkt. Dagobert meldet sich ${(_reminder ?? _suggested(rate)).sentence} wieder.',
           ),
         ),
       );
@@ -135,15 +135,17 @@ class _AddWishSheetState extends ConsumerState<AddWishSheet> {
   @override
   Widget build(BuildContext context) {
     final rate = ref.watch(hourlyRateProvider);
+    final hoursPerDay = ref.watch(hoursPerDayProvider);
     final hours = _hours(rate);
     final suggested = _suggested(rate);
     final effectiveReminder = _reminderTouched ? (_reminder ?? suggested) : suggested;
     final bottom = MediaQuery.of(context).viewInsets.bottom;
+    final safeBottom = MediaQuery.viewPaddingOf(context).bottom;
 
     return Padding(
       padding: EdgeInsets.only(bottom: bottom),
       child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+        padding: EdgeInsets.fromLTRB(20, 4, 20, 16 + safeBottom),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -157,7 +159,7 @@ class _AddWishSheetState extends ConsumerState<AddWishSheet> {
               ],
             ),
             const SizedBox(height: 16),
-            _Label('Was willst du?'),
+            _Label('Was möchtest du dir merken?'),
             TextField(
               controller: _title,
               autofocus: widget.initialTitle == null || widget.initialTitle!.isEmpty,
@@ -165,9 +167,12 @@ class _AddWishSheetState extends ConsumerState<AddWishSheet> {
               textInputAction: TextInputAction.next,
               onSubmitted: (_) => _priceFocus.requestFocus(),
               style: DgType.bodyStrong.copyWith(fontSize: 16),
-              decoration: const InputDecoration(hintText: 'z. B. Kopfhörer, Wochenendtrip, Sofa'),
+              decoration: const InputDecoration(
+                hintText: 'z. B. Kopfhörer, Wochenendtrip, Sofa',
+                isDense: true,
+              ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 10),
             _Label('Preis'),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -208,14 +213,18 @@ class _AddWishSheetState extends ConsumerState<AddWishSheet> {
                       style: DgType.amount.copyWith(fontSize: 18),
                     ),
                     Text(
-                      rate == null ? 'Einkommen im Profil' : 'netto arbeiten',
+                      rate == null
+                          ? 'Einkommen im Profil'
+                          : hours != null && hours / hoursPerDay >= 1
+                          ? WorkDays.formatDays(hours / hoursPerDay)
+                          : 'Arbeit netto',
                       style: DgType.meta.copyWith(fontSize: 11),
                     ),
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 10),
             _Label('Link zum Produkt (optional)'),
             TextField(
               controller: _url,
@@ -231,8 +240,8 @@ class _AddWishSheetState extends ConsumerState<AddWishSheet> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
-            _Label('Wie würdest du es einordnen?'),
+            const SizedBox(height: 12),
+            _Label('Brauchst du es oder willst du es?'),
             SizedBox(
               width: double.infinity,
               child: SegmentedButton<WishType>(
@@ -263,15 +272,15 @@ class _AddWishSheetState extends ConsumerState<AddWishSheet> {
                 style: DgType.meta.copyWith(fontSize: 12),
               ),
             ],
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             _Label('Wie sehr willst du es gerade?'),
             DesireSlider(value: _desire, onChanged: (v) => setState(() => _desire = v)),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             Row(
               crossAxisAlignment: CrossAxisAlignment.baseline,
               textBaseline: TextBaseline.alphabetic,
               children: [
-                Expanded(child: _Label('Erinnere mich in')),
+                Expanded(child: _Label('Erinnerung in')),
                 if (!_reminderTouched)
                   Text(
                     hours == null
@@ -297,14 +306,14 @@ class _AddWishSheetState extends ConsumerState<AddWishSheet> {
                   ),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 6),
             const Divider(),
             TextButton(
               onPressed: () => setState(() => _showMore = !_showMore),
               style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
                 alignment: Alignment.centerLeft,
-                minimumSize: const Size.fromHeight(44),
+                minimumSize: const Size.fromHeight(40),
               ),
               child: Row(
                 children: [
@@ -354,7 +363,7 @@ class _AddWishSheetState extends ConsumerState<AddWishSheet> {
               ),
               const SizedBox(height: 8),
             ],
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             Row(
               children: [
                 Expanded(

@@ -25,6 +25,7 @@ class VaultScreen extends ConsumerWidget {
     final savings = ref.watch(savingsProvider);
     final skipped = ref.watch(skippedWishesProvider);
     final settings = ref.watch(settingsProvider);
+    final hoursPerDay = ref.watch(hoursPerDayProvider);
     final now = clock.now();
 
     // Letzte 6 Monate
@@ -105,7 +106,7 @@ class VaultScreen extends ConsumerWidget {
                               ? (savings.count == 0
                                     ? 'Noch leer. Der erste Verzicht füllt ihn.'
                                     : '${savings.count} bewusste ${savings.count == 1 ? 'Entscheidung' : 'Entscheidungen'}')
-                              : '${WorkHours.format(savings.hours).replaceFirst('≈ ', '≈ ')} deines Lebens behalten',
+                              : '${WorkDays.formatWithDays(savings.hours, hoursPerDay)} Lebenszeit behalten',
                           style: DgType.meta.copyWith(fontSize: 14, fontWeight: FontWeight.w600),
                           textAlign: TextAlign.center,
                         ),
@@ -250,7 +251,7 @@ class VaultScreen extends ConsumerWidget {
                     const EmptyState(
                       icon: DgIcons.moneyBag,
                       title: 'Hier landet jeder Verzicht.',
-                      body: 'Wische einen Wunsch in der Merkliste nach links, oder tippe im Detail auf "Verzichten".',
+                      body: 'Wisch einen Wunsch in der Merkliste nach links oder tipp im Detail auf „Verzichten“.',
                     ),
                   for (final w in skipped)
                     Padding(

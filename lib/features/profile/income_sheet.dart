@@ -71,7 +71,9 @@ class _IncomeSheetState extends ConsumerState<IncomeSheet> {
   @override
   Widget build(BuildContext context) {
     final rate = WorkHours.hourlyRateCents(netMonthlyCents: _netCents, hoursPerWeek: _hoursValue);
-    final bottom = widget.embedded ? 0.0 : MediaQuery.of(context).viewInsets.bottom;
+    final bottom = widget.embedded
+        ? 0.0
+        : MediaQuery.of(context).viewInsets.bottom + MediaQuery.viewPaddingOf(context).bottom;
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 4, 20, (widget.embedded ? 0 : 20) + bottom),
       child: Column(

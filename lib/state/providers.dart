@@ -58,6 +58,12 @@ final hourlyRateProvider = Provider<int?>((ref) {
   );
 });
 
+/// Stunden pro Arbeitstag (Wochenstunden / 5, sonst 8).
+final hoursPerDayProvider = Provider<double>((ref) {
+  final s = ref.watch(settingsProvider);
+  return WorkDays.hoursPerDay(s.hoursPerWeek);
+});
+
 // ---------------------------------------------------------------------------
 // Wishes
 // ---------------------------------------------------------------------------

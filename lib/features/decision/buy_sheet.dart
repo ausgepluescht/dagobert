@@ -63,7 +63,7 @@ class _BuySheetState extends State<_BuySheet> {
 
   @override
   Widget build(BuildContext context) {
-    final bottom = MediaQuery.of(context).viewInsets.bottom;
+    final bottom = MediaQuery.of(context).viewInsets.bottom + MediaQuery.viewPaddingOf(context).bottom;
     final paid = MoneyFormat.parseCents(_price.text);
     final cheaper = paid != null && paid < widget.item.priceCents;
     return Padding(
