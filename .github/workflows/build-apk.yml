@@ -31,6 +31,12 @@ jobs:
           channel: stable
           cache: true
 
+      # Cacht Gradle-Distribution und Abhängigkeiten zwischen Läufen, damit
+      # Ausfälle der GitHub-Release-Downloads den Build nicht mehr stoppen.
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
+
       - name: Install dependencies
         run: flutter pub get
 
@@ -59,7 +65,14 @@ jobs:
         run: echo "::warning::Kein KEYSTORE_BASE64-Secret. Die APK wird mit einem Wegwerf-Debug-Key signiert, Updates lassen sich nicht über eine frühere Version installieren. Anleitung in der README."
 
       - name: Build APK
-        run: flutter build apk --release --target-platform android-arm64 --build-number=${{ github.run_number }}
+        # Bis zu drei Anläufe, falls Downloads (Gradle, Kotlin) kurzzeitig scheitern.
+        run: |
+          for i in 1 2 3; do
+            flutter build apk --release --target-platform android-arm64 --build-number=${{ github.run_number }} && exit 0
+            echo "Build-Anlauf $i fehlgeschlagen, neuer Versuch in 90 s"
+            sleep 90
+          done
+          exit 1
 
       - name: Rename APK
         run: cp build/app/outputs/flutter-apk/app-release.apk "dagobert-${{ github.run_number }}.apk"
