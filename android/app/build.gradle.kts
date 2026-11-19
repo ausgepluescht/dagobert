@@ -16,7 +16,7 @@ if (hasReleaseKeystore) {
 }
 
 android {
-    namespace = "de.martin.dagobert"
+    namespace = "de.martin.flipo"
     // flutter_local_notifications und androidx.core 1.19 verlangen API 37.
     compileSdk = 37
     ndkVersion = flutter.ndkVersion
@@ -29,7 +29,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "de.martin.dagobert"
+        applicationId = "de.martin.flipo"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

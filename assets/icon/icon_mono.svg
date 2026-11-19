@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <!-- Monochrome: Zylinder-Silhouette, Band ausgespart. -->
-  <g transform="translate(512 528) rotate(-8) translate(-512 -512)" fill="#FFFFFF">
-    <path d="M150 660 C 200 790, 824 790, 874 660 C 890 650, 882 630, 866 636 C 820 720, 204 720, 158 636 C 142 630, 134 650, 150 660 Z"/>
-    <path d="M338 700 C 356 580, 352 420, 322 292 Q 512 236 702 292 C 672 420, 668 580, 686 700 Q 512 752 338 700 Z"/>
-    <ellipse cx="512" cy="292" rx="190" ry="44"/>
-    <path d="M345 648 Q 512 708 679 648 L 684 596 Q 512 654 340 596 Z" fill="#000000"/>
-  </g>
-</svg>

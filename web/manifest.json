@@ -1,11 +1,11 @@
 {
-    "name": "dagobert",
-    "short_name": "dagobert",
+    "name": "flipo",
+    "short_name": "flipo",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#FBFAF6",
+    "theme_color": "#1F1F1F",
+    "description": "Flipchart-Figuren zeichnen lernen.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

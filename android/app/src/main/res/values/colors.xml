@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="dagobert_surface">#FFF8F1</color>
-    <color name="dagobert_orange">#E2711D</color>
-	<color name="ic_launcher_background">#FFFFFF</color>
+    <color name="flipo_paper">#FBFAF6</color>
+    <color name="flipo_ink">#1F1F1F</color>
+	<color name="ic_launcher_background">#FBFAF6</color>
 </resources>

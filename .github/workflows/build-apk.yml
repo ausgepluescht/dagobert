@@ -52,10 +52,11 @@ jobs:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
-          echo "$KEYSTORE_BASE64" | base64 --decode > android/app/dagobert-release.jks
+          echo "$KEYSTORE_BASE64" | base64 --decode > android/app/flipo-release.jks
           {
-            echo "storeFile=dagobert-release.jks"
+            echo "storeFile=flipo-release.jks"
             echo "storePassword=$KEYSTORE_PASSWORD"
+            # Der Keystore im Secret stammt aus dem Dagobert-Projekt und behält seinen Alias.
             echo "keyAlias=dagobert"
             echo "keyPassword=$KEYSTORE_PASSWORD"
           } > android/key.properties
@@ -75,10 +76,10 @@ jobs:
           exit 1
 
       - name: Rename APK
-        run: cp build/app/outputs/flutter-apk/app-release.apk "dagobert-${{ github.run_number }}.apk"
+        run: cp build/app/outputs/flutter-apk/app-release.apk "flipo-${{ github.run_number }}.apk"
 
       - uses: actions/upload-artifact@v4
         with:
-          name: dagobert-apk-${{ github.run_number }}
-          path: dagobert-${{ github.run_number }}.apk
+          name: flipo-apk-${{ github.run_number }}
+          path: flipo-${{ github.run_number }}.apk
           retention-days: 30
