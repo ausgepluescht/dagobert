@@ -23,7 +23,8 @@ class PracticeScreen extends StatefulWidget {
   State<PracticeScreen> createState() => _PracticeScreenState();
 }
 
-class _PracticeScreenState extends State<PracticeScreen> with SingleTickerProviderStateMixin {
+class _PracticeScreenState extends State<PracticeScreen>
+    with SingleTickerProviderStateMixin {
   final _drawing = Drawing();
   MarkerColor _color = MarkerColor.black;
   MarkerWidth _width = MarkerWidth.medium;
@@ -35,7 +36,9 @@ class _PracticeScreenState extends State<PracticeScreen> with SingleTickerProvid
     ..addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         Future.delayed(const Duration(milliseconds: 500), () {
-          if (mounted && _demo.status == AnimationStatus.completed) setState(() => _demo.reset());
+          if (mounted && _demo.status == AnimationStatus.completed) {
+            setState(() => _demo.reset());
+          }
         });
       }
     });
@@ -66,14 +69,33 @@ class _PracticeScreenState extends State<PracticeScreen> with SingleTickerProvid
     _width = first.width;
   }
 
-  double _stepLength(FigureStep step) => step.strokes.fold(0.0, (sum, s) => sum + s.length);
+  double _stepLength(FigureStep step) =>
+      step.strokes.fold(0.0, (sum, s) => sum + s.length);
 
   void _playDemo() {
     final step = _currentStep;
     if (step == null) return;
     final len = _stepLength(step);
-    _demo.duration = Duration(milliseconds: (600 + len * 14).round().clamp(700, 4500));
+    _demo.duration = Duration(
+      milliseconds: (600 + len * 14).round().clamp(700, 4500),
+    );
     _demo.forward(from: 0);
+  }
+
+  /// Blatt leeren, aber beim aktuellen Schritt bleiben: noch einmal üben.
+  void _restart() {
+    setState(() {
+      _demo.reset();
+      _drawing.clear();
+    });
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        const SnackBar(
+          content: Text('Blatt ist leer. Noch einmal.'),
+          duration: Duration(seconds: 1),
+        ),
+      );
   }
 
   void _goToStep(int index) {
@@ -98,8 +120,18 @@ class _PracticeScreenState extends State<PracticeScreen> with SingleTickerProvid
     final action = await showModalBottomSheet<_AfterFinish>(
       context: context,
       backgroundColor: Palette.paper,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      builder: (context) => _ResultSheet(figure: f, result: result, next: next, empty: _drawing.isEmpty),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => SafeArea(
+        top: false,
+        child: _ResultSheet(
+          figure: f,
+          result: result,
+          next: next,
+          empty: _drawing.isEmpty,
+        ),
+      ),
     );
     if (!mounted) return;
     switch (action) {
@@ -111,7 +143,10 @@ class _PracticeScreenState extends State<PracticeScreen> with SingleTickerProvid
       case _AfterFinish.next:
         if (next != null) {
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => PracticeScreen(figure: next, lesson: widget.lesson)),
+            MaterialPageRoute(
+              builder: (_) =>
+                  PracticeScreen(figure: next, lesson: widget.lesson),
+            ),
           );
         }
       case _AfterFinish.back:
@@ -129,7 +164,9 @@ class _PracticeScreenState extends State<PracticeScreen> with SingleTickerProvid
     if (i >= 0 && i + 1 < lesson.figures.length) return lesson.figures[i + 1];
     // Letzte Figur der Lektion: erste Figur der nächsten Lektion anbieten.
     final li = allLessons.indexOf(lesson);
-    if (li >= 0 && li + 1 < allLessons.length) return allLessons[li + 1].figures.first;
+    if (li >= 0 && li + 1 < allLessons.length) {
+      return allLessons[li + 1].figures.first;
+    }
     return null;
   }
 
@@ -139,9 +176,16 @@ class _PracticeScreenState extends State<PracticeScreen> with SingleTickerProvid
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: Palette.paper,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      builder: (context) => Padding(
-        padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(
+          24,
+          20,
+          24,
+          24 + MediaQuery.paddingOf(context).bottom,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,8 +198,14 @@ class _PracticeScreenState extends State<PracticeScreen> with SingleTickerProvid
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(f.name, style: Theme.of(context).textTheme.titleLarge),
-                      Text(f.meaning, style: Theme.of(context).textTheme.bodySmall),
+                      Text(
+                        f.name,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      Text(
+                        f.meaning,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                     ],
                   ),
                 ),
@@ -171,7 +221,9 @@ class _PracticeScreenState extends State<PracticeScreen> with SingleTickerProvid
             for (var i = 0; i < f.steps.length; i++)
               Padding(
                 padding: const EdgeInsets.only(bottom: 4),
-                child: Text('${i + 1}. ${f.steps[i].title}: ${f.steps[i].hint}'),
+                child: Text(
+                  '${i + 1}. ${f.steps[i].title}: ${f.steps[i].hint}',
+                ),
               ),
           ],
         ),
@@ -183,63 +235,87 @@ class _PracticeScreenState extends State<PracticeScreen> with SingleTickerProvid
   Widget build(BuildContext context) {
     final f = _figure;
     final step = _currentStep;
-    final demoLength = _demo.isAnimating || _demo.status == AnimationStatus.completed
-        ? (step == null ? null : _stepLength(step) * Curves.easeInOut.transform(_demo.value))
+    final demoLength =
+        _demo.isAnimating || _demo.status == AnimationStatus.completed
+        ? (step == null
+              ? null
+              : _stepLength(step) * Curves.easeInOut.transform(_demo.value))
         : null;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(f?.name ?? 'Freies Blatt'),
         actions: [
+          IconButton(
+            tooltip: 'Neu üben: Blatt leeren',
+            onPressed: _drawing.isEmpty ? null : _restart,
+            icon: const Icon(Icons.refresh_rounded),
+          ),
           if (f != null) ...[
             IconButton(
               tooltip: _ghost ? 'Vorlage ausblenden' : 'Vorlage einblenden',
               onPressed: () => setState(() => _ghost = !_ghost),
-              icon: Icon(_ghost ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+              icon: Icon(
+                _ghost
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+              ),
             ),
-            IconButton(tooltip: 'Vorführen', onPressed: _playDemo, icon: const Icon(Icons.play_circle_outline)),
-            IconButton(tooltip: 'Merkhilfe', onPressed: _showInfo, icon: const Icon(Icons.lightbulb_outline)),
+            IconButton(
+              tooltip: 'Vorführen',
+              onPressed: _playDemo,
+              icon: const Icon(Icons.play_circle_outline),
+            ),
+            IconButton(
+              tooltip: 'Merkhilfe',
+              onPressed: _showInfo,
+              icon: const Icon(Icons.lightbulb_outline),
+            ),
           ],
         ],
       ),
-      body: Column(
-        children: [
-          if (f != null && step != null) _StepHeader(figure: f, step: _step, onStep: _goToStep),
-          Expanded(
-            child: ClipRect(
-              child: DrawingCanvas(
-                strokes: _drawing.strokes,
-                color: _color,
-                width: _width,
-                figure: f,
-                currentStep: _step,
-                showGhost: _ghost,
-                demoLength: demoLength,
-                onStrokeEnd: (s) => setState(() => _drawing.add(s)),
+      body: SafeArea(
+        top: false,
+        child: Column(
+          children: [
+            if (f != null && step != null)
+              _StepHeader(figure: f, step: _step, onStep: _goToStep),
+            Expanded(
+              child: ClipRect(
+                child: DrawingCanvas(
+                  strokes: _drawing.strokes,
+                  color: _color,
+                  width: _width,
+                  figure: f,
+                  currentStep: _step,
+                  showGhost: _ghost,
+                  demoLength: demoLength,
+                  onStrokeEnd: (s) => setState(() => _drawing.add(s)),
+                ),
               ),
             ),
-          ),
-          if (f != null && step != null)
-            _StepNavigation(
-              step: step,
-              index: _step,
-              count: f.steps.length,
-              onPrev: _step > 0 ? () => _goToStep(_step - 1) : null,
-              onNext: _isLastStep ? _finish : () => _goToStep(_step + 1),
-              isLast: _isLastStep,
+            if (f != null && step != null)
+              _StepNavigation(
+                step: step,
+                index: _step,
+                count: f.steps.length,
+                onPrev: _step > 0 ? () => _goToStep(_step - 1) : null,
+                onNext: _isLastStep ? _finish : () => _goToStep(_step + 1),
+                isLast: _isLastStep,
+              ),
+            MarkerToolbar(
+              color: _color,
+              width: _width,
+              onColor: (c) => setState(() => _color = c),
+              onWidth: (w) => setState(() => _width = w),
+              canUndo: _drawing.canUndo,
+              canRedo: _drawing.canRedo,
+              onUndo: () => setState(_drawing.undo),
+              onRedo: () => setState(_drawing.redo),
+              onClear: () => setState(_drawing.clear),
             ),
-          MarkerToolbar(
-            color: _color,
-            width: _width,
-            onColor: (c) => setState(() => _color = c),
-            onWidth: (w) => setState(() => _width = w),
-            canUndo: _drawing.canUndo,
-            canRedo: _drawing.canRedo,
-            onUndo: () => setState(_drawing.undo),
-            onRedo: () => setState(_drawing.redo),
-            onClear: () => setState(_drawing.clear),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -247,7 +323,11 @@ class _PracticeScreenState extends State<PracticeScreen> with SingleTickerProvid
 
 /// Schrittleiste: ein Punkt pro Schritt, der aktuelle gefüllt.
 class _StepHeader extends StatelessWidget {
-  const _StepHeader({required this.figure, required this.step, required this.onStep});
+  const _StepHeader({
+    required this.figure,
+    required this.step,
+    required this.onStep,
+  });
 
   final Figure figure;
   final int step;
@@ -264,15 +344,18 @@ class _StepHeader extends StatelessWidget {
               child: GestureDetector(
                 onTap: () => onStep(i),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 2,
+                    vertical: 8,
+                  ),
                   child: Container(
                     height: 5,
                     decoration: BoxDecoration(
                       color: i < step
                           ? Palette.ink
                           : i == step
-                              ? Palette.accent
-                              : Palette.inkFaint,
+                          ? Palette.accent
+                          : Palette.inkFaint,
                       borderRadius: BorderRadius.circular(3),
                     ),
                   ),
@@ -310,13 +393,25 @@ class _StepNavigation extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(8, 6, 8, 2),
       child: Row(
         children: [
-          IconButton(onPressed: onPrev, icon: const Icon(Icons.chevron_left_rounded), tooltip: 'Schritt zurück'),
+          IconButton(
+            onPressed: onPrev,
+            icon: const Icon(Icons.chevron_left_rounded),
+            tooltip: 'Schritt zurück',
+          ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Schritt ${index + 1} von $count: ${step.title}', style: text.titleSmall),
-                Text(step.hint, style: text.bodySmall?.copyWith(color: Palette.ink), maxLines: 3, overflow: TextOverflow.ellipsis),
+                Text(
+                  'Schritt ${index + 1} von $count: ${step.title}',
+                  style: text.titleSmall,
+                ),
+                Text(
+                  step.hint,
+                  style: text.bodySmall?.copyWith(color: Palette.ink),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
             ),
           ),
@@ -324,14 +419,22 @@ class _StepNavigation extends StatelessWidget {
           isLast
               ? FilledButton(
                   onPressed: onNext,
-                  style: FilledButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10)),
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
+                  ),
                   child: const Text('Fertig'),
                 )
               : IconButton.filled(
                   onPressed: onNext,
                   icon: const Icon(Icons.chevron_right_rounded),
                   tooltip: 'Nächster Schritt',
-                  style: IconButton.styleFrom(backgroundColor: Palette.ink, foregroundColor: Palette.paper),
+                  style: IconButton.styleFrom(
+                    backgroundColor: Palette.ink,
+                    foregroundColor: Palette.paper,
+                  ),
                 ),
         ],
       ),
@@ -342,7 +445,12 @@ class _StepNavigation extends StatelessWidget {
 enum _AfterFinish { again, next, back }
 
 class _ResultSheet extends StatelessWidget {
-  const _ResultSheet({required this.figure, required this.result, required this.next, required this.empty});
+  const _ResultSheet({
+    required this.figure,
+    required this.result,
+    required this.next,
+    required this.empty,
+  });
 
   final Figure figure;
   final ScoreResult result;
@@ -365,7 +473,10 @@ class _ResultSheet extends StatelessWidget {
                 padding: const EdgeInsets.all(14),
                 shadow: false,
                 tilt: false,
-                child: Text('${result.percent} %', style: text.displaySmall?.copyWith(color: Palette.accent)),
+                child: Text(
+                  '${result.percent} %',
+                  style: text.displaySmall?.copyWith(color: Palette.accent),
+                ),
               ),
               const SizedBox(width: 18),
               Expanded(
@@ -373,7 +484,12 @@ class _ResultSheet extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(figure.name, style: text.titleLarge),
-                    Text(empty ? 'Leeres Blatt. Trau dich, der erste Strich zählt.' : result.verdict, style: text.bodyMedium),
+                    Text(
+                      empty
+                          ? 'Leeres Blatt. Trau dich, der erste Strich zählt.'
+                          : result.verdict,
+                      style: text.bodyMedium,
+                    ),
                   ],
                 ),
               ),
@@ -389,15 +505,21 @@ class _ResultSheet extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () => Navigator.of(context).pop(_AfterFinish.again),
+                  onPressed: () =>
+                      Navigator.of(context).pop(_AfterFinish.again),
                   child: const Text('Noch einmal'),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: FilledButton(
-                  onPressed: () => Navigator.of(context).pop(next != null ? _AfterFinish.next : _AfterFinish.back),
-                  child: Text(next != null ? 'Weiter: ${next!.name}' : 'Zur Übersicht', overflow: TextOverflow.ellipsis),
+                  onPressed: () => Navigator.of(
+                    context,
+                  ).pop(next != null ? _AfterFinish.next : _AfterFinish.back),
+                  child: Text(
+                    next != null ? 'Weiter: ${next!.name}' : 'Zur Übersicht',
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
             ],
